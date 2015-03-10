@@ -96,3 +96,13 @@ Returns an object with key/value pairs for each of the uniquely named inputs in 
 
 #### <a name="form-setData"></a> `form.setData(data)`
 Sets input values for each key in the object `data` according to the rules described in [form.set()](#form-set).
+
+
+## Contributing
+Wanna help make this better? Awesome! Here's how:
+
+1. Fork this repo
+2. Run `npm install --dev` to install the development dependencies
+3. Run `npm test` to run the tests
+4. Issue a pull request
+5. Profit?
