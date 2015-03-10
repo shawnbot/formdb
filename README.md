@@ -58,6 +58,8 @@ form.on('change:name', function(name, e) {
 </script>
 ```
 
+**Note:** formdb only pays attention to form inputs with a `name` attribute. All of your inputs should have name attributes anyway. :trollface:
+
 ## Form objects
 Form objects created with the `formdb.Form()` constructor can get and set data in their respective HTML form.
 
@@ -97,6 +99,20 @@ Returns an object with key/value pairs for each of the uniquely named inputs in 
 #### <a name="form-setData"></a> `form.setData(data)`
 Sets input values for each key in the object `data` according to the rules described in [form.set()](#form-set).
 
+#### <a name="form-on"></a> `form.on(event, callback)`
+Listen for events on the form. These ones are handled specially:
+
+* `change`: this adds a `change` listener to the underlying form element and calls `callback(data, e)` with the form's `data`.
+* `change:{key}`: this adds a `change` listener to the underlying form that calls `callback(value, e)` with the changed input's `value` if its name is equal to `key`.
+
+#### <a name="form-off"></a> `form.off(event, callback)`
+Remove a listener added with [form.on()](#form-on). You'll need to keep a reference to your callback function in order to remove it:
+
+```js
+var onchange = function(data) { /* ... */ };
+form.on('change', onchange);
+form.off('change', onchange);
+```
 
 ## Contributing
 Wanna help make this better? Awesome! Here's how:
