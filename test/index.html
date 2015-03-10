@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <script src="../formdb.js"></script>
+  </head>
+  <body>
+    <form id="basic">
+      <p>
+        Text input "foo":
+        <input name="foo" value="foo">
+      </p>
+      <p>
+        Select input "bar":
+        <select name="bar">
+          <option value="">(empty)</option>
+          <option>bar 1</option>
+          <option selected>bar 2</option>
+          <option>bar 3</option>
+        </select>
+      </p>
+      <p>
+        Some radio buttons, "baz":
+        <ul>
+          <li><label><input type="radio" name="baz" value="a"> A</label></li>
+          <li><label><input type="radio" name="baz" value="b" checked> B</label></li>
+          <li><label><input type="radio" name="baz" value="c"> C</label></li>
+          <li><label><input type="radio" name="baz" value=""> (none)</label></li>
+        </ul>
+      </p>
+      <p>
+        Some checkboxes, "qux":
+        <ul>
+          <li><label><input type="checkbox" name="qux" value="a"> a</label></li>
+          <li><label><input type="checkbox" name="qux" value="b" checked> b</label></li>
+          <li><label><input type="checkbox" name="qux" value="c"> c</label></li>
+          <li><label><input type="checkbox" name="qux" value=""> (empty)</label></li>
+        </ul>
+      </p>
+      <p>
+        <input type="submit" name="submit" value="x submit">
+        <input type="submit" name="submit" value="y submit">
+        <button name="submit" value="z">z submit ("z")</button>
+      </p>
+
+      <textarea class="output" cols="24" rows="16"></textarea>
+    </form>
+  </body>
+  <script>
+
+    var basic = formdb.Form("#basic");
+    basic._form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      basic._form.dispatchEvent(new Event("change"));
+    });
+    basic._form.addEventListener("change", function(e) {
+      var data = basic.getData();
+      this.querySelector("textarea.output").value = JSON.stringify(data, null, "  ");
+    });
+    basic._form.dispatchEvent(new Event("change"));
+
+  </script>
+</html>
