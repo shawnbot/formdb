@@ -1,7 +1,7 @@
 (function(formdb) {
   'use strict';
 
-  formdb.version = '0.1.1';
+  formdb.version = '0.1.2';
 
   var Form = function(element) {
     if (!(this instanceof formdb.Form)) return new formdb.Form(element);
@@ -68,18 +68,19 @@
 
     // add an event listneer
     on: function(type, callback) {
-      var self = this;
+      var self = this,
+          listener;
       if (type.match(/^change:/)) {
-        var name = type.split(':').pop(),
-            listener = function listener(e) {
-              if (e.target.name === name) {
-                return callback.call(self, e.target.value, e);
-              }
-            };
+        var name = type.split(':').pop();
+        listener = function listener(e) {
+          if (e.target.name === name) {
+            return callback.call(self, e.target.value, e);
+          }
+        };
         callback[LISTENER_PROPERTY] = listener;
         this.element.addEventListener('change', listener);
       } else if (type === 'change' || type === 'submit') {
-        var listener = function listener(e) {
+        listener = function listener(e) {
           return callback.call(self, self.getData(), e);
         };
         callback[LISTENER_PROPERTY] = listener;
