@@ -7,7 +7,13 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "minify": "uglifyjs formdb.js > formdb.min.js",
+    "watchy": "watchy -w formdb.js -- npm run minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shawnbot/formdb.git"
   },
   "author": "Shawn Allen",
   "license": "CC0",
