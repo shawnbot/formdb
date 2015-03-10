@@ -5,46 +5,17 @@
 
   var Form = function(element) {
     if (!(this instanceof formdb.Form)) return new formdb.Form(element);
-    this._form = (typeof element === 'object')
+    this.element = (typeof element === 'object')
       ? element
       : document.querySelector(element || 'form');
     this._inputs = '[name]';
-    this._form.addEventListener('click', this._onClick.bind(this));
+    this.element.addEventListener('click', this._onClick.bind(this));
   };
 
   // where to stash a reference to the actual event listener
-  var LISTENER_PROPERTY = '__formdb_listener';
+  var LISTENER_PROPERTY = '_elementdb_listener';
 
   Form.prototype = {
-
-    on: function(type, callback) {
-      var self = this;
-      if (type.match(/^change:/)) {
-        var name = type.split(':').pop(),
-            listener = callback[LISTENER_PROPERTY] = function listener(e) {
-              if (e.target.name === name) {
-                callback.call(self, e.target.value, e);
-              }
-            };
-        this._form.addEventListener('change', listener);
-      } else if (type === 'change') {
-        var listener = callback[LISTENER_PROPERTY] = function listener(e) {
-          callback.call(self, self.getData(), e);
-        };
-        this._form.addEventListener('change', listener);
-      } else {
-        this._form.addEventListener(type, callback);
-      }
-      return this;
-    },
-
-    off: function(type, callback) {
-      if (type.match(/^change:/)) {
-        type = 'change';
-      }
-      this._form.removeEventListener(type, callback[LISTENER_PROPERTY] || callback);
-      return this;
-    },
 
     // set the form data as an object
     getData: function() {
@@ -84,15 +55,49 @@
 
     // get the inputs as an array
     getInputs: function(filter) {
-      var inputs = slice(this._form.querySelectorAll(this._inputs));
+      var inputs = slice(this.element.querySelectorAll(this._inputs));
       return filter ? inputs.filter(filter) : inputs;
     },
 
+    // get inputs by name
     getInputsByName: function(name) {
       return this.getInputs(function(input) {
         return input.name == name;
       });
     },
+
+    // add an event listneer
+    on: function(type, callback) {
+      var self = this;
+      if (type.match(/^change:/)) {
+        var name = type.split(':').pop(),
+            listener = function listener(e) {
+              if (e.target.name === name) {
+                return callback.call(self, e.target.value, e);
+              }
+            };
+        callback[LISTENER_PROPERTY] = listener;
+        this.element.addEventListener('change', listener);
+      } else if (type === 'change' || type === 'submit') {
+        var listener = function listener(e) {
+          return callback.call(self, self.getData(), e);
+        };
+        callback[LISTENER_PROPERTY] = listener;
+        this.element.addEventListener(type, listener);
+      } else {
+        this.element.addEventListener(type, callback);
+      }
+      return this;
+    },
+
+    off: function(type, callback) {
+      if (type.match(/^change:/)) {
+        type = 'change';
+      }
+      this.element.removeEventListener(type, callback[LISTENER_PROPERTY] || callback);
+      return this;
+    },
+
 
     _onClick: function(e) {
       var target = e.target;
