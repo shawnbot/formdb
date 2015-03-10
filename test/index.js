@@ -4,12 +4,14 @@ var jsdom = require('jsdom'),
 
 describe('formdb.Form', function() {
 
-  var document,
+  var window,
+      document,
       root,
       form,
       createForm = function(done) {
-        jsdom.env('<form></form>', [], function(errors, window) {
-          document = window.document;
+        jsdom.env('<form></form>', [], function(errors, win) {
+          window = win;
+          document = win.document;
           root = document.querySelector('form');
           form = new formdb.Form(root);
           done();
@@ -294,7 +296,7 @@ describe('formdb.Form', function() {
     });
 
     it('removes "change" handlers', function(done) {
-      var change = function() { throw 'changed!'; };
+      var change = function() { throw new Error('changed!'); };
       form.on('change', change);
       form.off('change', change);
       var input = append('input', {type: 'checkbox', name: 'foo', value: 'bar'});
@@ -316,7 +318,7 @@ describe('formdb.Form', function() {
     });
 
     it('removes "change:name" handlers', function(done) {
-      var change = function() { throw 'changed!'; };
+      var change = function() { throw new Error('changed!'); };
       form.on('change:foo', change);
       form.off('change:foo', change);
       var input = append('input', {type: 'checkbox', name: 'foo', value: 'bar'});
@@ -324,6 +326,16 @@ describe('formdb.Form', function() {
       assert.ok(input.checked);
       dispatch(input, 'change');
       done();
+    });
+
+    xit('dispatches "submit" events', function(done) {
+      form.on('submit', function(data, e) {
+        assert.deepEqual(data, {foo: 'bar', submit: 'go'});
+        done();
+      });
+      var input = append('input', {type: 'checkbox', name: 'foo', value: 'bar'}),
+          submit = append('input', {type: 'submit', name: 'submit', value: 'go'});
+      dispatch(root, 'submit');
     });
 
   });
@@ -356,11 +368,13 @@ describe('formdb.Form', function() {
     el.parentNode && el.parentNode.removeChild(el);
   }
 
-  function dispatch(el, type, data) {
-    var e = document.createEvent('Events');
+  function dispatch(el, type) {
+    var e = document.createEvent('HTMLEvents');
     e.initEvent(type, true, false);
-    e.data = data;
-    el.dispatchEvent(e);
+    setImmediate(function() {
+      el.dispatchEvent(e);
+    });
+    return e;
   }
 
 });
