@@ -38,9 +38,9 @@
         </ul>
       </p>
       <p>
-        <input type="submit" name="submit" value="x submit">
-        <input type="submit" name="submit" value="y submit">
-        <button name="submit" value="z">z submit ("z")</button>
+        <input type="submit" name="sub" value="x submit">
+        <input type="submit" name="sub" value="y submit">
+        <button name="sub" value="z">z submit ("z")</button>
       </p>
 
       <textarea class="output" cols="24" rows="16"></textarea>
@@ -48,16 +48,21 @@
   </body>
   <script>
 
-    var basic = formdb.Form("#basic");
-    basic._form.addEventListener("submit", function(e) {
+    var form = formdb.Form('form')
+      .on('change', change)
+      .on('submit', submit);
+
+    function change(data) {
+      form.element.querySelector('textarea.output').value = JSON.stringify(data, null, '  ');
+    }
+
+    function submit(data, e) {
+      change(data);
       e.preventDefault();
-      basic._form.dispatchEvent(new Event("change"));
-    });
-    basic._form.addEventListener("change", function(e) {
-      var data = basic.getData();
-      this.querySelector("textarea.output").value = JSON.stringify(data, null, "  ");
-    });
-    basic._form.dispatchEvent(new Event("change"));
+      return false;
+    }
+
+    change(form.getData());
 
   </script>
 </html>
