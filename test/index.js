@@ -246,6 +246,14 @@ describe('formdb.Form', function() {
   });
 
   describe('form.setData()', function() {
+    it('does not write null/undefined', function() {
+      var input = append('input', {name: 'foo', type: 'text'});
+      form.setData({});
+      assert.strictEqual(input.value, '');
+      form.setData({foo: undefined});
+      assert.strictEqual(input.value, '');
+    });
+
     it('writes a bunch of data', function() {
       append('input', {name: 'first_name', type: 'text', value: 'Shawn'});
       append('input', {name: 'last_name', type: 'text', value: 'Allen'});
