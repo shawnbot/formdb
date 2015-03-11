@@ -1,0 +1,7 @@
+{
+  "indent":     2,
+  "laxbreak":   true,
+  "validthis":  true,
+  "plusplus":   true,
+  "freeze":     true
+}
