@@ -1,4 +1,4 @@
-# formdb
+# formdb ![](https://travis-ci.org/shawnbot/formdb.svg)
 A simple HTML form data API with zero dependencies.
 
 ## What is this?
