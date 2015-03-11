@@ -37,17 +37,17 @@
     // set a specific key from the form
     get: function(key) {
       var data = {};
-      this.getInputs().forEach(function(input) {
+      this.getInputsByName(key).forEach(function(input) {
         formdb.readInput(input, data);
       });
       return data[key];
     },
 
     // set a specific key/value
-    set: function(name, value) {
+    set: function(key, value) {
       var data = {};
-      data[name] = value;
-      this.getInputs().forEach(function(input) {
+      data[key] = value;
+      this.getInputsByName(key).forEach(function(input) {
         formdb.writeInput(input, data);
       });
       return this;
@@ -177,7 +177,7 @@
     if (!formdb.validInput(input)) return false;
 
     var multiple = false,
-        value = data[input.name],
+        value = data[input.name] || '',
         list = Array.isArray(value) ? value : [value];
 
     // coerce all values to strings for indexOf()
