@@ -1,6 +1,6 @@
 {
   "name": "formdb",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "HTML form data binding with zero dependencies",
   "main": "formdb.js",
   "directories": {
