@@ -53,6 +53,18 @@
       return this;
     },
 
+    reset: function() {
+      if (typeof this.element.reset === 'function') {
+        this.element.reset();
+      } else {
+        var data = {};
+        this.getInputs().forEach(function(input) {
+          formdb.writeInput(input, data);
+        });
+      }
+      return this;
+    },
+
     // get the inputs as an array
     getInputs: function(filter) {
       var inputs = slice(this.element.querySelectorAll(this._inputs));

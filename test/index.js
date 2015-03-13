@@ -295,6 +295,42 @@ describe('formdb.Form', function() {
       form.setData(data);
       assert.deepEqual(form.getData(), data);
     });
+
+    it('can reset a form', function() {
+      append('input', {name: 'first_name', type: 'text', value: 'Shawn'});
+      append('input', {name: 'last_name', type: 'text', value: 'Allen'});
+      append('input', {name: 'gender', type: 'radio', value: 'female'});
+      append('input', {name: 'gender', type: 'radio', value: 'male', checked: 'checked'});
+      var languages = ['javascript', 'python'];
+      append('select', {name: 'languages', multiple: 'multiple'},
+        ['javascript', 'python', 'ruby'].map(function(lang) {
+          return create('option', {
+            value: lang,
+            selected: languages.indexOf(lang) > -1
+          }, lang);
+        }));
+      var skills = ['frontend', 'backend'];
+      ['frontend', 'backend', 'devops'].forEach(function(skill) {
+        append('input', {
+          type: 'checkbox',
+          name: 'skills',
+          value: skill,
+          checked: skills.indexOf(skill) > -1
+        }, skill);
+      });
+
+      var original = form.getData();
+      form.setData({
+        first_name: 'Jane',
+        last_name: 'Doe',
+        gender: 'female',
+        languages: ['ruby'],
+        skills: 'devops'
+      });
+
+      form.reset();
+      assert.deepEqual(form.getData(), original);
+    });
   });
 
   describe('form events', function() {
