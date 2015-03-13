@@ -28,9 +28,9 @@
 
     // set the form data using an object
     setData: function(data) {
-      this.getInputs().forEach(function(input) {
-        formdb.writeInput(input, data);
-      });
+      for (var key in data) {
+        this.set(key, data[key]);
+      }
       return this;
     },
 

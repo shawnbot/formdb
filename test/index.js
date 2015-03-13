@@ -213,7 +213,7 @@ describe('formdb.Form', function() {
   });
 
   describe('form.getData()', function() {
-    it('reads a bunch of data', function() {
+    it('reads all sorts of data', function() {
       append('input', {name: 'first_name', type: 'text', value: 'Shawn'});
       append('input', {name: 'last_name', type: 'text', value: 'Allen'});
       append('input', {name: 'gender', type: 'radio', value: 'female'});
@@ -254,7 +254,14 @@ describe('formdb.Form', function() {
       assert.strictEqual(input.value, '');
     });
 
-    it('writes a bunch of data', function() {
+    it('only writes the data you pass it', function() {
+      var a = append('input', {name: 'foo', value: 'foo'}),
+          b = append('input', {name: 'bar'});
+      form.setData({bar: 'bar'});
+      assert.equal(a.value, 'foo');
+    });
+
+    it('writes all sorts of data', function() {
       append('input', {name: 'first_name', type: 'text', value: 'Shawn'});
       append('input', {name: 'last_name', type: 'text', value: 'Allen'});
       append('input', {name: 'gender', type: 'radio', value: 'female'});
