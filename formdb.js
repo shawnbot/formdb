@@ -1,7 +1,7 @@
 (function(formdb) {
   'use strict';
 
-  formdb.version = '0.1.5';
+  formdb.version = '0.2.0';
 
   var Form = function(element) {
     if (!(this instanceof formdb.Form)) return new formdb.Form(element);
