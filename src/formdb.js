@@ -1,4 +1,3 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.formdb = f()}})(function(){var define,module,exports;module={exports:(exports={})};
 'use strict';
 
 var formdb = {
@@ -13,14 +12,11 @@ var Form = function(element) {
     ? element
     : document.querySelector(element || 'form');
   this._inputs = '[name]';
-  var that = this;
-  this.element.addEventListener('click', function(e) {
-    that._onClick(e);
-  });
+  this.element.addEventListener('click', this._onClick.bind(this));
 };
 
 // where to stash a reference to the actual event listener
-var LISTENER_PROPERTY = '_formdb_listener';
+var LISTENER_PROPERTY = '_elementdb_listener';
 
 Form.prototype = {
 
@@ -117,6 +113,7 @@ Form.prototype = {
     this.element.removeEventListener(type, callback[LISTENER_PROPERTY] || callback);
     return this;
   },
+
 
   _onClick: function(e) {
     var target = e.target;
@@ -263,5 +260,3 @@ function extend(a, b) {
   }
   return a;
 }
-
-return module.exports;});
